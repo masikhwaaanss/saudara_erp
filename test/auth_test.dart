@@ -10,31 +10,33 @@ void main() {
     late AuthRepository authRepository;
 
     setUpAll(() async {
-      db = AppDatabase.test();
+      db = AppDatabase();
       authRepository = AuthRepository(db);
     });
 
     tearDownAll(() async {
-      await db.close();
+      // Don't close test database
     });
 
     test('User can register with valid credentials', () async {
       final user = await authRepository.register(
-        username: 'testuser',
+        username: 'testuser_${DateTime.now().millisecondsSinceEpoch}',
         password: 'password123',
         fullName: 'Test User',
         role: UserRole.admin_1,
       );
 
-      expect(user.username, 'testuser');
+      expect(user.username, contains('testuser_'));
       expect(user.fullName, 'Test User');
       expect(user.role, 'admin_1');
       expect(user.isActive, true);
     });
 
     test('User cannot register with duplicate username', () async {
+      final uniqueUsername = 'duplicate_${DateTime.now().millisecondsSinceEpoch}';
+      
       await authRepository.register(
-        username: 'duplicate',
+        username: uniqueUsername,
         password: 'password123',
         fullName: 'First User',
         role: UserRole.admin_1,
@@ -42,7 +44,7 @@ void main() {
 
       expect(
         () => authRepository.register(
-          username: 'duplicate',
+          username: uniqueUsername,
           password: 'password456',
           fullName: 'Second User',
           role: UserRole.gudang,
@@ -52,37 +54,41 @@ void main() {
     });
 
     test('User can login with correct credentials', () async {
+      final username = 'logintest_${DateTime.now().millisecondsSinceEpoch}';
+      
       await authRepository.register(
-        username: 'logintest',
+        username: username,
         password: 'password123',
         fullName: 'Login Test User',
         role: UserRole.owner,
       );
 
-      final user = await authRepository.login('logintest', 'password123');
+      final user = await authRepository.login(username, 'password123');
 
-      expect(user.username, 'logintest');
+      expect(user.username, username);
       expect(user.isActive, true);
       expect(user.lastLogin, isNotNull);
     });
 
     test('User cannot login with incorrect password', () async {
+      final username = 'wrongpass_${DateTime.now().millisecondsSinceEpoch}';
+      
       await authRepository.register(
-        username: 'wrongpass',
+        username: username,
         password: 'correctpassword',
         fullName: 'Wrong Password User',
         role: UserRole.gudang,
       );
 
       expect(
-        () => authRepository.login('wrongpass', 'incorrectpassword'),
+        () => authRepository.login(username, 'incorrectpassword'),
         throwsException,
       );
     });
 
     test('User cannot login with non-existent username', () async {
       expect(
-        () => authRepository.login('nonexistent', 'password123'),
+        () => authRepository.login('nonexistent_${DateTime.now()}', 'password123'),
         throwsException,
       );
     });
@@ -104,15 +110,17 @@ void main() {
     });
 
     test('User can change password', () async {
+      final username = 'changepass_${DateTime.now().millisecondsSinceEpoch}';
+      
       await authRepository.register(
-        username: 'changepass',
+        username: username,
         password: 'oldpassword',
         fullName: 'Change Password User',
         role: UserRole.admin_1,
       );
 
       // Get user
-      final user = await authRepository.getUserByUsername('changepass');
+      final user = await authRepository.getUserByUsername(username);
       expect(user, isNotNull);
 
       // Change password
@@ -124,8 +132,8 @@ void main() {
       expect(success, true);
 
       // Try login with new password
-      final loginUser = await authRepository.login('changepass', 'newpassword');
-      expect(loginUser.username, 'changepass');
+      final loginUser = await authRepository.login(username, 'newpassword');
+      expect(loginUser.username, username);
     });
   });
 }

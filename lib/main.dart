@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saudara_erp/routing/app_router.dart';
+import 'package:saudara_erp/core/init/database_initializer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize database with default data
+  await DatabaseInitializer.initialize();
+  
   runApp(const ProviderScope(child: MyApp()));
 }
 
