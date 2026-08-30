@@ -1,0 +1,84 @@
+name: saudara_erp
+description: SAUDARA ERP - Production-grade desktop ERP for PVC ceiling business
+publish_to: none
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.4.0
+  flutter: ^3.24.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Core Dependencies
+  cupertino_icons: ^1.0.8
+  get: ^4.6.6
+  get_it: ^7.6.4
+  riverpod: ^2.5.1
+  flutter_riverpod: ^2.5.1
+
+  # Database
+  drift: ^2.14.1
+  sqlite3_flutter_libs: ^0.5.24
+  path: ^1.8.3
+  path_provider: ^2.1.1
+
+  # Validation & Formatting
+  validators: ^3.0.0
+  intl: ^0.19.0
+  decimal: ^2.3.3
+
+  # UI Components
+  flutter_spinkit: ^5.2.1
+  lottie: ^3.1.2
+  fluttertoast: ^8.2.4
+  awesome_dialog: ^3.2.1
+  dropdown_search: ^5.0.5
+  data_table_2: ^4.7.7
+  charts_flutter: ^0.12.0
+
+  # File & Export
+  file_picker: ^8.0.3
+  excel: ^4.0.3
+  csv: ^6.0.0
+  image: ^4.1.5
+  pdf: ^3.10.7
+  printing: ^5.11.2
+
+  # Utils
+  uuid: ^4.0.0
+  crypto: ^3.0.3
+  intl_phone_number_input: ^0.7.3
+  json_serializable: ^6.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+  drift_dev: ^2.14.1
+  build_runner: ^2.4.8
+  json_serializable: ^6.8.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+    - assets/logos/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
